@@ -10,6 +10,22 @@ function App() {
 
   const getUserName = () => {
     //tbd in class
+    fetch("http://localhost:9999/userinfo",{
+      method:"GET",
+      credentials:"include"
+    }).then(r=>{
+      if(!r.ok){
+        setLoggedIn(false);
+        //setUserName(undefined);
+        return {success:false}
+      }else{
+        return r.json();
+      }
+    }).then(r=>{
+      if(r.success!==false){
+        setUserName(r.userName);
+      }
+    })
   }
 
   useEffect(() => {

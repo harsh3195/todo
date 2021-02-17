@@ -23,7 +23,8 @@ export default function TodoList(props) {
 
   useEffect(() => {
     //tbd in class
-  });
+    
+  }, []);
 
   return (
     <div id="main">
