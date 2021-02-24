@@ -10,19 +10,21 @@ function App() {
 
   const getUserName = () => {
     //tbd in class
+    
     fetch("http://localhost:9999/userinfo",{
       method:"GET",
       credentials:"include"
     }).then(r=>{
       if(!r.ok){
         setLoggedIn(false);
-        //setUserName(undefined);
+        setUserName(undefined);
         return {success:false}
       }else{
         return r.json();
       }
     }).then(r=>{
       if(r.success!==false){
+        setLoggedIn(true);
         setUserName(r.userName);
       }
     })
@@ -41,12 +43,38 @@ function App() {
   };
 
   const logoutHandler = () => {
-    //tbd in class
+    return fetch('http://localhost:9999/logout', { credentials: 'include'})
+    .then(r => {
+      if(r.ok) {
+        setLoggedIn(false);
+        setUserName(undefined);
+      }
+    })
   };
 
 
+
   const loginOrSignup = (url, username, password) => {
-    //tbd in class
+    fetch(url,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({userName:username,password}),
+      credentials:"include"
+    }).then(r=>{
+      if(r.ok){
+        return {success:true}
+      }else{
+        return r.json();
+      }
+    }).then(r=>{
+      if(r.success){
+        return getUserName();
+      }else{
+        setError(r.err);
+      }
+    })
   }
   return loggedIn ? (
     <TodoList username={userName} logoutHandler={logoutHandler}/>
